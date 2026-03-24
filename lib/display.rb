@@ -3,6 +3,7 @@ module Display
   GREEN = "\e[32m●\e[0m"
   YELLOW = "\e[33m●\e[0m"
   BLUE = "\e[34m●\e[0m"
+  PEG_VALUES = [RED, GREEN, BLUE, YELLOW].freeze
   EMPTY_SLOT = "\e[90m○\e[0m"
   BLACK_PEG = "\e[90m◆\e[0m"
   WHITE_PEG = "\e[97m◆\e[0m"
@@ -14,6 +15,22 @@ module Display
   def clear_and_announce(message)
     clear_screen
     puts message
+  end
+
+  def prompt_game_role
+    clear_screen
+    puts 'Mastermind — choose your role:'
+    puts '  1 — You guess (the computer sets the secret code)'
+    puts '  2 — You set the secret code (the computer guesses)'
+    puts 'Colors: r red · g green · b blue · y yellow'
+    loop do
+      print 'Enter 1 or 2: '
+      case gets&.chomp
+      when '1' then return :human_guesser
+      when '2' then return :human_codemaker
+      else puts 'Please enter 1 or 2.'
+      end
+    end
   end
 
   def render_guesses(board_state)
